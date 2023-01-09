@@ -1,0 +1,291 @@
+REPORT zalvexample10.
+*Table Declaration
+TABLES : vbak, vbap.
+*Type-Pools
+TYPE-POOLS : slis.
+
+*Types Declaration
+TYPES : BEGIN OF ty_vbak,
+
+vbeln TYPE vbak-vbeln,
+erdat TYPE vbak-erdat,
+ernam TYPE vbak-ernam,
+auart TYPE vbak-auart,
+vkorg TYPE vbak-vkorg,
+vtweg TYPE vbak-vtweg,
+spart TYPE vbak-spart,
+vkgrp TYPE vbak-vkgrp,
+kunnr TYPE vbak-kunnr,
+
+END OF ty_vbak.
+
+TYPES : BEGIN OF ty_vbap,
+
+vbeln TYPE vbap-vbeln,
+posnr TYPE vbap-posnr,
+matnr TYPE vbap-matnr,
+matkl TYPE vbap-matkl,
+arktx TYPE vbap-arktx,
+netwr TYPE vbap-netwr,
+waerk TYPE vbap-waerk,
+klmeng TYPE vbap-klmeng,
+vrkme TYPE vbap-vrkme,
+
+END OF ty_vbap.
+
+*Data Declaration
+DATA : gt_vbak TYPE STANDARD TABLE OF ty_vbak,
+              wa_vbak TYPE ty_vbak,
+              gt_vbap TYPE STANDARD TABLE OF ty_vbap,
+              wa_vbap TYPE ty_vbap.
+
+*Field Catalog and Layout Declaration
+DATA: gt_fcat TYPE slis_t_fieldcat_alv,
+              gt_fcat1 TYPE slis_t_fieldcat_alv,
+              wa_fcat LIKE LINE OF gt_fcat,
+              wa_fcat1 LIKE LINE OF gt_fcat1,
+              gt_layout TYPE slis_layout_alv.
+
+
+*Selection Screen
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
+SELECT-OPTIONS : so_vbeln FOR vbap-vbeln.
+SELECTION-SCREEN END OF BLOCK b1.
+
+START-OF-SELECTION.
+PERFORM get_data.
+PERFORM rep1_fieldcat.
+PERFORM rep2_fieldcat.
+PERFORM layout.
+PERFORM display.
+PERFORM display2.
+**************************************************
+
+FORM get_data.
+*Data Fetching
+SELECT vbeln
+erdat
+ernam
+auart
+vkorg
+vtweg
+spart
+vkgrp
+kunnr
+FROM vbak INTO TABLE gt_vbak
+WHERE vbeln IN so_vbeln.
+
+SORT gt_vbak BY vbeln.
+
+SELECT vbeln
+posnr
+matnr
+matkl
+arktx
+netwr
+waerk
+klmeng
+vrkme
+FROM vbap INTO TABLE gt_vbap
+WHERE vbeln IN so_vbeln.
+
+SORT gt_vbap BY vbeln.
+ENDFORM.
+
+FORM rep1_fieldcat.
+*Creating Fieldcatalog For Table 1: VBAK
+REFRESH : gt_fcat.
+CLEAR : wa_fcat.
+
+wa_fcat-col_pos = 1.
+wa_fcat-fieldname = ‘VBELN’.
+wa_fcat-seltext_m = ‘SO NO.’.
+wa_fcat-key = ‘X’.
+wa_fcat-hotspot = ‘X’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+
+wa_fcat-col_pos = 2.
+wa_fcat-fieldname = ‘ERDAT’.
+wa_fcat-seltext_m = ‘CREATED ON’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+wa_fcat-col_pos = 3.
+wa_fcat-fieldname = ‘ERNAM’.
+wa_fcat-seltext_m = ‘CREATED BY’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+wa_fcat-col_pos = 4.
+wa_fcat-fieldname = ‘AUART’.
+wa_fcat-seltext_m = ‘DOC. TYPE’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+wa_fcat-col_pos = 5.
+wa_fcat-fieldname = ‘VKORG’.
+wa_fcat-seltext_m = ‘SALES ORGANIZATION’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+wa_fcat-col_pos = 6.
+wa_fcat-fieldname = ‘VTWEG’.
+wa_fcat-seltext_m = ‘D. CHANNEL’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+wa_fcat-col_pos = 7.
+wa_fcat-fieldname = ‘SPART’.
+wa_fcat-seltext_m = ‘DIVISION’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+
+wa_fcat-col_pos = 8.
+wa_fcat-fieldname = ‘VKGRP’.
+wa_fcat-seltext_m = ‘SALES GROUP’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+wa_fcat-col_pos = 9.
+wa_fcat-fieldname = ‘KUNNR’.
+wa_fcat-seltext_m = ‘CUSTOMER’.
+APPEND wa_fcat TO gt_fcat.
+CLEAR wa_fcat.
+
+ENDFORM.
+
+FORM rep2_fieldcat.
+*Creating Fieldcatalog for table 2: VBAP
+REFRESH : gt_fcat1.
+CLEAR : wa_fcat1.
+
+wa_fcat1-col_pos = 1.
+wa_fcat1-fieldname = ‘VBELN’.
+wa_fcat1-seltext_m = ‘SD NO.’.
+wa_fcat1-key = ‘X’.
+wa_fcat1-hotspot = ‘X’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 2.
+wa_fcat1-fieldname = ‘POSNR’.
+wa_fcat1-seltext_m = ‘ITEM NO’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 3.
+wa_fcat1-fieldname = ‘MATNR’.
+wa_fcat1-seltext_m = ‘MATERIAL NO.’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 4.
+wa_fcat1-fieldname = ‘MATKL’.
+wa_fcat1-seltext_m = ‘MATERIAL GROUP’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 5.
+wa_fcat1-fieldname = ‘ARKTX’.
+wa_fcat1-seltext_m = ‘DESCRIPTION’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 6.
+wa_fcat1-fieldname = ‘NETWR’.
+wa_fcat1-seltext_m = ‘AMOUNT’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 7.
+wa_fcat1-fieldname = ‘WAERK’.
+wa_fcat1-seltext_m = ‘CURRENCY’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 8.
+wa_fcat1-fieldname = ‘KLMENG’.
+wa_fcat1-seltext_m = ‘QUANTITY’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+wa_fcat1-col_pos = 9.
+wa_fcat1-fieldname = ‘VRKME’.
+wa_fcat1-seltext_m = ‘SALES UNIT’.
+APPEND wa_fcat1 TO gt_fcat1.
+CLEAR wa_fcat1.
+
+ENDFORM.
+
+FORM layout.
+*CREATING LAYOUT FOR THE REPORT
+gt_layout-colwidth_optimize = ‘X’.
+gt_layout-edit = ‘X’.
+
+ENDFORM.
+
+FORM display.
+*Displaying report number 1: VBAK
+CALL FUNCTION ‘REUSE_ALV_GRID_DISPLAY’
+EXPORTING
+
+i_callback_program = sy-repid
+i_callback_pf_status_set = ‘SET_PF_STATUS’
+i_callback_user_command = ‘USER_COMMAND’
+is_layout = gt_layout
+it_fieldcat = gt_fcat
+
+TABLES
+          t_outtab = gt_vbak
+* EXCEPTIONS
+*       PROGRAM_ERROR = 1
+* OTHERS = 2
+.
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+ENDFORM.
+
+*Creating PF-STATUS
+
+FORM set_pf_status USING rt_extab TYPE slis_t_extab.
+*Creating PF_STATUS
+SET PF-STATUS ‘ZALVEXAMPLE10’.
+
+ENDFORM.
+
+*Creating User Command
+
+FORM user_command USING r_ucomm TYPE sy-ucomm rs_selfield TYPE slis_selfield.
+CASE r_ucomm.
+WHEN ‘REP2’.
+*When Click on PF_STATUS
+PERFORM rep2_fieldcat.
+PERFORM display2.
+ENDCASE.
+ENDFORM.
+
+*Displayiong Report Number 2: VBAP
+
+FORM display2.
+
+CALL FUNCTION ‘REUSE_ALV_GRID_DISPLAY’
+EXPORTING
+         i_callback_program = sy-repid
+         is_layout = gt_layout
+         it_fieldcat = gt_fcat1
+TABLES
+         t_outtab = gt_vbap
+* EXCEPTIONS
+*       PROGRAM_ERROR = 1
+* OTHERS = 2
+.
+IF sy-subrc <> 0.
+* Implement suitable error handling here
+ENDIF.
+
+ENDFORM.
