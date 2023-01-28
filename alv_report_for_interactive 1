@@ -59,6 +59,7 @@ PERFORM rep2_fieldcat.
 PERFORM layout.
 PERFORM display.
 PERFORM display2.
+
 **************************************************
 
 FORM get_data.
@@ -91,7 +92,7 @@ WHERE vbeln IN so_vbeln.
 
 SORT gt_vbap BY vbeln.
 ENDFORM.
-
+******************************************************************************************************************************************
 FORM rep1_fieldcat.
 *Creating Fieldcatalog For Table 1: VBAK
 REFRESH : gt_fcat.
@@ -104,7 +105,6 @@ wa_fcat-key = ‘X’.
 wa_fcat-hotspot = ‘X’.
 APPEND wa_fcat TO gt_fcat.
 CLEAR wa_fcat.
-
 
 wa_fcat-col_pos = 2.
 wa_fcat-fieldname = ‘ERDAT’.
@@ -141,7 +141,6 @@ wa_fcat-fieldname = ‘SPART’.
 wa_fcat-seltext_m = ‘DIVISION’.
 APPEND wa_fcat TO gt_fcat.
 CLEAR wa_fcat.
-
 
 wa_fcat-col_pos = 8.
 wa_fcat-fieldname = ‘VKGRP’.
@@ -219,14 +218,14 @@ APPEND wa_fcat1 TO gt_fcat1.
 CLEAR wa_fcat1.
 
 ENDFORM.
-
+*************************************************************************************************
 FORM layout.
 *CREATING LAYOUT FOR THE REPORT
 gt_layout-colwidth_optimize = ‘X’.
 gt_layout-edit = ‘X’.
 
 ENDFORM.
-
+*******************************************************************************************************
 FORM display.
 *Displaying report number 1: VBAK
 CALL FUNCTION ‘REUSE_ALV_GRID_DISPLAY’
@@ -249,7 +248,7 @@ IF sy-subrc <> 0.
 ENDIF.
 
 ENDFORM.
-
+***************************************************************************************************
 *Creating PF-STATUS
 
 FORM set_pf_status USING rt_extab TYPE slis_t_extab.
@@ -257,18 +256,20 @@ FORM set_pf_status USING rt_extab TYPE slis_t_extab.
 SET PF-STATUS ‘ZALVEXAMPLE10’.
 
 ENDFORM.
-
+****************************************************************************************************
 *Creating User Command
 
 FORM user_command USING r_ucomm TYPE sy-ucomm rs_selfield TYPE slis_selfield.
 CASE r_ucomm.
 WHEN ‘REP2’.
+
 *When Click on PF_STATUS
 PERFORM rep2_fieldcat.
 PERFORM display2.
+
 ENDCASE.
 ENDFORM.
-
+*************************************************************************************************
 *Displayiong Report Number 2: VBAP
 
 FORM display2.
@@ -289,3 +290,4 @@ IF sy-subrc <> 0.
 ENDIF.
 
 ENDFORM.
+***********************************************************************************************
