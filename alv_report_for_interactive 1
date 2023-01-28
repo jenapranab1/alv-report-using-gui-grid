@@ -3,7 +3,7 @@ REPORT zalvexample10.
 TABLES : vbak, vbap.
 *Type-Pools
 TYPE-POOLS : slis.
-
+******************************************************************
 *Types Declaration
 TYPES : BEGIN OF ty_vbak,
 
@@ -18,7 +18,7 @@ vkgrp TYPE vbak-vkgrp,
 kunnr TYPE vbak-kunnr,
 
 END OF ty_vbak.
-
+********************************************************************
 TYPES : BEGIN OF ty_vbap,
 
 vbeln TYPE vbap-vbeln,
@@ -33,7 +33,7 @@ vrkme TYPE vbap-vrkme,
 
 END OF ty_vbap.
 
-*Data Declaration
+*Data Declaration***************************************************
 DATA : gt_vbak TYPE STANDARD TABLE OF ty_vbak,
               wa_vbak TYPE ty_vbak,
               gt_vbap TYPE STANDARD TABLE OF ty_vbap,
@@ -47,7 +47,7 @@ DATA: gt_fcat TYPE slis_t_fieldcat_alv,
               gt_layout TYPE slis_layout_alv.
 
 
-*Selection Screen
+*Selection Screen*****************************************************
 SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
 SELECT-OPTIONS : so_vbeln FOR vbap-vbeln.
 SELECTION-SCREEN END OF BLOCK b1.
@@ -61,7 +61,6 @@ PERFORM display.
 PERFORM display2.
 
 **************************************************
-
 FORM get_data.
 *Data Fetching
 SELECT vbeln
@@ -155,7 +154,7 @@ APPEND wa_fcat TO gt_fcat.
 CLEAR wa_fcat.
 
 ENDFORM.
-
+************************************************************************************
 FORM rep2_fieldcat.
 *Creating Fieldcatalog for table 2: VBAP
 REFRESH : gt_fcat1.
